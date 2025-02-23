@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { DndContext, closestCenter } from "@dnd-kit/core";
+import { DndContext, DragEndEvent, closestCenter } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -49,7 +49,6 @@ export default function Home() {
   const [goalPriority, setGoalPriority] = useState("Medium");
   const [expenseAmount, setExpenseAmount] = useState(0);
   const [expenseCategory, setExpenseCategory] = useState("");
-  const [transactionMessage, setTransactionMessage] = useState("");
 
   const addGoal = () => {
     if (goalName) {
@@ -74,9 +73,9 @@ export default function Home() {
     );
   };
 
-  const onDragEnd = (event: any) => {
+  const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (active.id !== over.id) {
+    if (over != null && active.id !== over.id) {
       setGoals((items) => {
         const oldIndex = items.findIndex((item) => item.id === active.id);
         const newIndex = items.findIndex((item) => item.id === over.id);
